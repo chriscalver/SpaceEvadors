@@ -24,8 +24,8 @@ function Flower(x, y) {                //planet express ship
     }
     
     this.show = function() {
-      noStroke();
-      fill(255, 0, 200, 150);     
+      //noStroke();
+      // fill(255, 0, 200, 150);     
       image(planetexpress, this.x, this.y, this.r, this.r);
        //rectMode(CENTER);
       //circle(this.x, this.y, this.r);

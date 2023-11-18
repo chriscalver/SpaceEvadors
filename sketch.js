@@ -8,6 +8,13 @@ let playerImage;
 let enemyImage;
 let planetexpress;
 
+let beginGame = true;
+let rightPressed = false;
+let leftPressed = false;
+let shootPressed = false;
+let checkbox;
+
+
 function preload() {
     bgImage = loadImage('back.png');
     playerImage = loadImage('player.png');
@@ -15,7 +22,6 @@ function preload() {
     planetexpress = loadImage('planetexpress.png')
 }
 
-let checkbox;
 function setup() {
     checkbox = createCheckbox("Pause Game", false);
     checkbox.position(1050, 655);
@@ -23,20 +29,24 @@ function setup() {
     ship = new Ship();
     drop = new Drop();
 
-    for (var i = 0; i < 6; i++) {
-        newflowers[i] = new newFlower(i * 100 + 120, -100);
+    document.addEventListener("keydown", this.keydown);
+    document.addEventListener("keyup", this.keyup);
+
+    setTimeout(showNewFlower, 3000);
+    function showNewFlower() {
+        for (var i = 0; i < 6; i++) {
+            newflowers[i] = new newFlower(i * 100 + 120, -100);
+        }
+        beginGame = false;
     }
 
-    setTimeout(showFlowers, 9000);
-
+    setTimeout(showFlowers, 12000);
     function showFlowers() {       //scrolling futurama ship
         for (var i = 0; i < 1; i++) {
             flowers[i] = new Flower(-520, -30);
         }
-
     }
-
-    // spawn enemies
+    // spawn additional enemies
     // for (let i = 0; i < 5; i++) {
     //     let enemy = {
     //         x: random(100, width - 100),
@@ -53,8 +63,12 @@ function draw() {
         return;
     }
     background(bgImage);
+    if (beginGame) {
+        textSize(52);
+        fill('grey');
+        text('Begin Game', 250, 200);
+    }
     rectMode(CENTER);
-
     ship.show();
     ship.move();
 
@@ -92,14 +106,10 @@ function draw() {
     for (var i = 0; i < newflowers.length; i++) {
         newflowers[i].show();
         newflowers[i].move();
-
         // if (flowers[i].x > width || flowers[i].x < 0) {
         //     edge = true;
         // }
     }
-
-
-
 
     for (var i = 0; i < flowers.length; i++) {
         flowers[i].show();
@@ -131,31 +141,61 @@ function draw() {
             newflowers.splice(i, 1);        // delete drop from array
         }
     }
-
 }
 
-function keyPressed() {
-    if (keyCode === 32) {   // space bar
+keydown = (event) => {
+    if (event.code == "KeyD") {
+        rightPressed = true;
+       // console.log("right");
+    }
+    if (event.code == "KeyA") {
+        leftPressed = true;
+        //console.log("left");
+    }
+    if (event.code == "Space") {
+        shootPressed = true;
+    }
+};
+keyup = (event) => {
+    if (event.code == "KeyD") {
+        rightPressed = false;
+    }
+    if (event.code == "KeyA") {
+        leftPressed = false;
+    }
+    if (event.code == "Space") {
         var drop = new Drop(ship.x, height);
         drops.push(drop);
+        // shootPressed = false;
     }
+};
 
-    if (keyCode === 68) {    // key d right
-        ship.setDir(1);
-    }
-    if (keyCode === 65) {   // key  a left
-        ship.setDir(-1);
-    }
-}
 
-function keyReleased() {
-    if (key != 68) {
-        //  ship.setDir(0);
-    }
-    if (key != 65) {
-        //  ship.setDir(0);
-    }
-}
+//function keyPressed() {
+// if (keyCode === 32) {   // space bar
+//     var drop = new Drop(ship.x, height);
+//     drops.push(drop);
+// }
+
+
+// if (keyCode === 65) {   // key  a left
+//     ship.setDir(-1);
+// }
+
+// if (keyCode === 68) {    // key d right
+//     ship.setDir(1);
+// }
+//}
+
+//function keyReleased() {
+// if (key != 68) {
+//     //  ship.setDir(0);
+
+// }
+// if (key != 65) {
+//    //   ship.setDir(0);
+// }
+//}
 
 function mousePressed() {
     //spawn bullet
