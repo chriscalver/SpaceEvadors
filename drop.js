@@ -19,7 +19,7 @@ function Drop(x, y) {
   //collison detection
 
   this.hits = function(flower) {
-    var d = dist(this.x, this.y, flower.x, flower.y);
+    var d = dist(this.x, this.y, flower.x + 30, flower.y);
 
     if (d < this.r + flower.r) {
       return true;
@@ -28,15 +28,15 @@ function Drop(x, y) {
     }
   }
 
-//   this.hits2 = function(newflower) {
-//     var d = dist(this.x, this.y, newflower.x, newflower.y);
+  this.hits2 = function(newflower) {
+    var d = dist(this.x, this.y, newflower.x + 17, newflower.y);
     
-//     if (d < this.r + newflower.r) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   }
+    if (d < this.r + newflower.r) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   this.move = function() {
     this.y = this.y - 10;
   }

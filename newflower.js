@@ -34,7 +34,7 @@ function newFlower(x, y) {
     this.show = function() {
       noStroke();
       fill(255, 0, 200, 150);
-      image(enemyImage, this.x, this.y, this.r*2, this.r*2);
+      image(enemyImage, this.x, this.y, this.r*2, this.r*2);  //enemy.png 
     }  
   }
   

@@ -14,13 +14,17 @@ function preload() {
     enemyImage = loadImage('enemy2.png');
     planetexpress = loadImage('planetexpress.png')
 }
+
+let checkbox;
 function setup() {
+    checkbox = createCheckbox("Pause Game", false);
+    checkbox.position(1050, 655);
     createCanvas(800, 650);
     ship = new Ship();
     drop = new Drop();
 
     for (var i = 0; i < 6; i++) {
-        newflowers[i] = new newFlower(i*100+120, -100);
+        newflowers[i] = new newFlower(i * 100 + 120, -100);
     }
 
     setTimeout(showFlowers, 9000);
@@ -43,6 +47,11 @@ function setup() {
 }
 
 function draw() {
+
+    if (checkbox.checked()) { // check for pause
+        checkbox.label = "Game Paused";
+        return;
+    }
     background(bgImage);
     rectMode(CENTER);
 
@@ -63,17 +72,17 @@ function draw() {
         //collision detection
         for (var j = 0; j < flowers.length; j++) {
             if (drops[i].hits(flowers[j])) {
-               // flowers[j].kill();
-             flowers[j].grow();
+                // flowers[j].kill();
+                flowers[j].grow();
 
                 drops[i].evaporate();
             }
         }
 
         for (var j = 0; j < newflowers.length; j++) {
-            if (drops[i].hits(newflowers[j])) {
+            if (drops[i].hits2(newflowers[j])) {
                 //newflowers[j].grow();        //  drop hits flower and grows
-                newflowers[j].kill();   
+                newflowers[j].kill();
                 drops[i].evaporate();
             }
         }
@@ -125,25 +134,6 @@ function draw() {
 
 }
 
-
-
-
-
-
-function keyReleased() {
-    if (key != 68) {
-        ship.setDir(0);
-    }
-    if (key != 65) {
-        ship.setDir(0);
-    }
-}
-function mousePressed() {
-    //spawn bullet
-    var drop = new Drop(ship.x, height);
-    drops.push(drop);
-}
-
 function keyPressed() {
     if (keyCode === 32) {   // space bar
         var drop = new Drop(ship.x, height);
@@ -156,4 +146,19 @@ function keyPressed() {
     if (keyCode === 65) {   // key  a left
         ship.setDir(-1);
     }
+}
+
+function keyReleased() {
+    if (key != 68) {
+        //  ship.setDir(0);
+    }
+    if (key != 65) {
+        //  ship.setDir(0);
+    }
+}
+
+function mousePressed() {
+    //spawn bullet
+    var drop = new Drop(ship.x, height);
+    drops.push(drop);
 }
