@@ -2,18 +2,27 @@
 function Ship() {
   this.x = width / 2;
   this.xdir = 0;
+  this.y = 550;
   this.r = 80;
  
 
   this.show = function () {
   
-    image(playerImage, this.x - this.r / 2, height - 100, this.r, this.r);
+    image(playerImage, this.x - this.r / 2, this.y, this.r, this.r);
     if (this.x <= 12) {
       this.x = 8;     // keep ship in frame
     }
     if (this.x > width - 8) { // keep ship in frame
       this.x = width - 10;
     }
+    if (this.y < 350){
+      this.y = 350;
+    }
+
+    if (this.y > 550){
+      this.y = 550;
+    }
+
   }
 
   this.setDir = function (dir) {
@@ -24,10 +33,16 @@ function Ship() {
     // this.x += this.xdir*6;
     if (rightPressed) {
       //console.log("right on");
-      this.x += 6;
+      this.x += 3;
     } else if (leftPressed) {
-      this.x -= 6;
+      this.x -= 3;
     }
 
+    if (upPressed) {
+      //console.log("right on");
+      this.y += 2;
+    } else if (downPressed) {
+      this.y -= 2;
+    }
   }
 }

@@ -9,9 +9,11 @@ let playerImage;
 let enemyImage;
 let planetexpress;
 
-let beginGame = true;
+let levelone = true;
 let rightPressed = false;
 let leftPressed = false;
+let upPressed = false;
+let downPressed = false;
 let shootPressed = false;
 let checkbox;
 let pauseGame = false;
@@ -42,7 +44,7 @@ function setup() {
         for (var i = 0; i < 6; i++) {
             fallingenemy[i] = new fallingEnemy(i * 100 + 120, -100);
         }
-        beginGame = false;
+        levelone = false;
     }
 
 
@@ -65,21 +67,19 @@ function setup() {
     // }
 }
 
-function draw() {
-
-    
-
+function draw() {    
+    background(bgImage);    
     if (pauseGame) { // check for pause
-        //checkbox.label = "Game Paused";
+        //checkbox.label = "Game Paused";        
         textSize(52);
         fill('grey');
         text('Game Paused', 230, 230);
-        pauseGame = true;
+        levelone = false;
         return;
     }
 
-    background(bgImage);
-    if (beginGame) {
+   
+    if (levelone) {
         textSize(52);
         fill('grey');
         text('Level One', 280, 230);
@@ -166,6 +166,15 @@ function draw() {
 }
 
 keydown = (event) => {
+    if (event.code == "KeyW") {
+        downPressed = true;
+        // console.log("right");
+    }
+    if (event.code == "KeyX") {
+        upPressed = true;
+        // console.log("right");
+    }
+
     if (event.code == "KeyD") {
         rightPressed = true;
         // console.log("right");
@@ -184,7 +193,7 @@ keydown = (event) => {
             pauseGame = false;
     
         }
-        console.log("Pause = " + pauseGame);
+        //console.log("Pause = " + pauseGame);
        // console.log("Unpause = " +unpauseGame);
     }
 };
@@ -202,6 +211,14 @@ keyup = (event) => {
         var drop = new Fire(ship.x, height);
         fire.push(drop);
         // shootPressed = false;
+    }
+    if (event.code == "KeyW") {
+        downPressed = false;
+        // console.log("right");
+    }
+    if (event.code == "KeyX") {
+        upPressed = false;
+        // console.log("right");
     }
 };
 
