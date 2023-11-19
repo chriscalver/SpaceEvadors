@@ -1,5 +1,5 @@
 
-function newFlower(x, y) {
+function fallingEnemy(x, y) {
     this.x = x;
     this.y = y;
     this.r = 30;  
@@ -19,7 +19,7 @@ function newFlower(x, y) {
 
     this.move = function() {
       //this.x = this.x + this.xdir;
-      this.y -= -0.5;
+      this.y -= -1;
 
     }
     

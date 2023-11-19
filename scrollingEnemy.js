@@ -1,8 +1,8 @@
 
-function Flower(x, y) {                //planet express ship
+function scrollingEnemy(x, y) {                //planet express ship
     this.x = x;
     this.y = y;
-    this.r = 160;  
+    this.r = 80;  
     this.xdir = 2;
     this.toDelete = false;
   
@@ -26,7 +26,7 @@ function Flower(x, y) {                //planet express ship
     this.show = function() {
       //noStroke();
       // fill(255, 0, 200, 150);     
-      image(planetexpress, this.x, this.y, this.r, this.r);
+      image(planetexpress, this.x, this.y, this.r * 2, this.r * 2);
        //rectMode(CENTER);
       //circle(this.x, this.y, this.r);
       

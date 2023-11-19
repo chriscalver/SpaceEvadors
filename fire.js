@@ -1,9 +1,9 @@
 
 
-function Drop(x, y) {
+function Fire(x, y) {
   this.x = x;
   this.y = y;
-  this.r = 2;
+  this.r = 3;
   this.toDelete = false;
 
   this.show = function() {
@@ -18,20 +18,20 @@ function Drop(x, y) {
   
   //collison detection
 
-  this.hits = function(flower) {
-    var d = dist(this.x, this.y, flower.x + 30, flower.y);
-
-    if (d < this.r + flower.r) {
+  this.hits = function(scrollingenemy) {
+    var d = dist(this.x, this.y, scrollingenemy.x +78, scrollingenemy.y + 50);
+    
+    if (d < this.r  + scrollingenemy.r) {
       return true;
     } else {
       return false;
     }
   }
 
-  this.hits2 = function(newflower) {
-    var d = dist(this.x, this.y, newflower.x + 17, newflower.y);
+  this.hits2 = function(fallingenemy) {
+    var d = dist(this.x, this.y, fallingenemy.x + 30, fallingenemy.y + 100);
     
-    if (d < this.r + newflower.r) {
+    if (d < this.r + fallingenemy.r) {
       return true;
     } else {
       return false;

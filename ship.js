@@ -8,12 +8,10 @@ function Ship() {
   this.show = function () {
   
     image(playerImage, this.x - this.r / 2, height - 100, this.r, this.r);
-
     if (this.x <= 12) {
-      this.x = 8;
+      this.x = 8;     // keep ship in frame
     }
-
-    if (this.x > width - 8) {
+    if (this.x > width - 8) { // keep ship in frame
       this.x = width - 10;
     }
   }
@@ -25,7 +23,7 @@ function Ship() {
   this.move = function (dir) {
     // this.x += this.xdir*6;
     if (rightPressed) {
-      console.log("right on");
+      //console.log("right on");
       this.x += 6;
     } else if (leftPressed) {
       this.x -= 6;
