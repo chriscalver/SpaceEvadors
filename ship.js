@@ -2,27 +2,24 @@
 function Ship() {
   this.x = width / 2;
   this.xdir = 0;
-  this.y = 550;
-  this.r = 80;
- 
+  this.y = 450;
+  this.r = 80; 
 
   this.show = function () {
   
     image(playerImage, this.x - this.r / 2, this.y, this.r, this.r);
     if (this.x <= 12) {
-      this.x = 8;     // keep ship in frame
+      this.x = 13;     // keep ship in frame
     }
     if (this.x > width - 8) { // keep ship in frame
       this.x = width - 10;
     }
-    if (this.y < 350){
-      this.y = 350;
+    if (this.y < 30){
+      this.y = 300;
     }
-
-    if (this.y > 550){
-      this.y = 550;
+    if (this.y > 450){
+      this.y = 450;
     }
-
   }
 
   this.setDir = function (dir) {

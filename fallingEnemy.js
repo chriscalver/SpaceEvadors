@@ -13,6 +13,7 @@ function fallingEnemy(x, y) {
       this.xdir *= -1;
       this.y += this.r;
     }
+
     this.kill = function() {
       this.toDelete = true;
     }
@@ -27,9 +28,9 @@ function fallingEnemy(x, y) {
       //this.x = this.x + this.xdir;
       //this.y -= -1;
       this.x -= 1;
-      this.y -= 1;
-      
+      this.y -= 1;      
     }
+    
 
     this.show = function() {
       noStroke();

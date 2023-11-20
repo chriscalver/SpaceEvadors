@@ -23,13 +23,8 @@ function scrollingEnemy(x, y) {                //planet express ship
      this.x = this.x + this.xdir;
     }
     
-    this.show = function() {
-      //noStroke();
-      // fill(255, 0, 200, 150);     
-      image(planetexpress, this.x, this.y, this.r * 2, this.r * 2);
-       //rectMode(CENTER);
-      //circle(this.x, this.y, this.r);
-      
+    this.show = function() {      
+      image(planetexpress, this.x, this.y, this.r * 2, this.r * 2);          
     }  
   }
   

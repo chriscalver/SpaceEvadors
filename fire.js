@@ -9,7 +9,7 @@ function Fire(x, y) {
   this.show = function() {
     noStroke();
     fill(250, 0, 0);
-    ellipse(this.x, this.y - 100, this.r*2, this.r*2);
+    ellipse(this.x, this.y, this.r*2, this.r*2);
   }
 
   this.evaporate = function() { // send back for deletion
@@ -19,7 +19,7 @@ function Fire(x, y) {
   //collison detection
 
   this.hits = function(scrollingenemy) {
-    var d = dist(this.x, this.y, scrollingenemy.x +78, scrollingenemy.y + 50);
+    var d = dist(this.x, this.y, scrollingenemy.x +78, scrollingenemy.y);
     
     if (d < this.r  + scrollingenemy.r) {
       return true;
@@ -29,7 +29,7 @@ function Fire(x, y) {
   }
 
   this.hits2 = function(fallingenemy) {
-    var d = dist(this.x, this.y, fallingenemy.x + 30, fallingenemy.y + 100);
+    var d = dist(this.x, this.y, fallingenemy.x + 30, fallingenemy.y);
     
     if (d < this.r + fallingenemy.r) {
       return true;

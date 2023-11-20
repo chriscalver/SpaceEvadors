@@ -8,86 +8,103 @@ let bgImage;
 let playerImage;
 let enemyImage;
 let planetexpress;
+var score = 0;
 
 let levelone = true;
+var edge = false;
+
 let rightPressed = false;
 let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
 let shootPressed = false;
-let checkbox;
 let pauseGame = false;
-let unpauseGame = false;
-
 
 function preload() {
     bgImage = loadImage('back.png');
     playerImage = loadImage('player.png');
     enemyImage = loadImage('enemy2.png');
-    planetexpress = loadImage('planetexpress.png')
+    planetexpress = loadImage('planetexpress.png');
+    font = loadFont('gamefont.ttf');
 }
 
-function setup() {
-    //checkbox = createCheckbox("Pause Game", false);
-    // checkbox.position(1050, 655);
-    createCanvas(800, 650);
-    ship = new Ship();
-    //fire = new Fire();
 
+
+
+
+
+function setup() {
+
+    createCanvas(800, 550);
+    ship = new Ship();
     document.addEventListener("keydown", this.keydown);
     document.addEventListener("keyup", this.keyup);
 
-    setTimeout(showfallingenemy, 2000);
-    //  setTimeout(showfallingenemy, 4000);   
-
-    function showfallingenemy() {
-        for (var i = 0; i < 6; i++) {
-            fallingenemy[i] = new fallingEnemy(i * 100 + 120, -100);
+    setTimeout(getfallingenemy, 2000);
+    function getfallingenemy() {
+        for (var i = 0; i < 3; i++) {
+            fallingenemy[i] = new fallingEnemy(i * 250 + 120, -100);
         }
         levelone = false;
     }
-
-
-
-    setTimeout(showscrollingenemy, 9000);
-    function showscrollingenemy() {       //scrolling futurama ship
+    setTimeout(getscrollingenemy, 9000);
+    function getscrollingenemy() {       //scrolling futurama ship
         for (var i = 0; i < 1; i++) {
             scrollingenemy[i] = new scrollingEnemy(-120, -20);
         }
     }
-
-
-    // spawn additional enemies
-    // for (let i = 0; i < 5; i++) {
-    //     let enemy = {
-    //         x: random(100, width - 100),
-    //         y: random(0, -1000),
-    //     };
-    //     enemies.push(enemy);
-    // }
 }
 
-function draw() {    
-    background(bgImage);    
+
+
+
+
+
+
+
+
+
+
+
+
+function draw() {
+    background(bgImage);
+    textFont(font);
+
+    textSize(22);
+    fill('grey');
+    text('Level One', 50, 30);
+
+
+    textSize(22);
+    fill('grey');
+    text('SCORE:', 510, 30);
+
+    textSize(22);
+    fill('grey');
+    // text('0000000', 630, 30);
+    text(score, 650, 30);
+
     if (pauseGame) { // check for pause
-        //checkbox.label = "Game Paused";        
-        textSize(52);
+        //checkbox.label = "Game Paused";      
+        textFont(font);
+        textSize(32);
         fill('grey');
         text('Game Paused', 230, 230);
         levelone = false;
         return;
     }
 
-   
     if (levelone) {
-        textSize(52);
+        textFont(font);
+        textSize(32);
+
         fill('grey');
-        text('Level One', 280, 230);
+        text('Level One', 260, 230);
     }
     rectMode(CENTER);
     ship.show();
     ship.move();
-
 
     for (var i = 0; i < fallingenemy.length; i++) {
         fallingenemy[i].show();
@@ -95,8 +112,9 @@ function draw() {
         // if (flowers[i].x > width || flowers[i].x < 0) {
         //     edge = true;
         // }
-    }
 
+
+    }
 
     for (var i = 0; i < scrollingenemy.length; i++) {
         scrollingenemy[i].show();
@@ -104,6 +122,10 @@ function draw() {
         // if (flowers[i].x > width || flowers[i].x < 0) {
         //     edge = true;
         // }
+        if (fallingenemy[i].y > 550) {
+            fallingenemy[i].kill();
+
+        }
     }
 
 
@@ -118,13 +140,18 @@ function draw() {
         fire[i].show();
         fire[i].move();
 
+        if (fire[i].y < 0) {
+            fire[i].evaporate();
+
+        }
+
         //collision detection
         for (var j = 0; j < scrollingenemy.length; j++) {
             if (fire[i].hits(scrollingenemy[j])) {
-                // scrollingenemy[j].kill();
-                scrollingenemy[j].grow();
-
+                scrollingenemy[j].kill();
+                //scrollingenemy[j].grow();
                 fire[i].evaporate();
+                score += 100;
             }
         }
 
@@ -133,13 +160,12 @@ function draw() {
                 //fallingenemy[j].grow();        //  drop hits flower and grows
                 fallingenemy[j].kill();
                 fire[i].evaporate();
+                score += 50;
             }
         }
     }
 
-    var edge = false;
-
-
+     console.log("enemies " + fallingenemy.length);
 
     if (edge) {
         for (var i = 0; i < scrollingenemy.length; i++) {
@@ -151,6 +177,7 @@ function draw() {
         if (fire[i].toDelete) {   // toDelete comes from drop 15
             fire.splice(i, 1);        // delete drop from array
         }
+
     }
 
     for (var i = scrollingenemy.length - 1; i >= 0; i--) {
@@ -158,12 +185,35 @@ function draw() {
             scrollingenemy.splice(i, 1);        // delete drop from array
         }
     }
+
+
     for (var i = fallingenemy.length - 1; i >= 0; i--) {
         if (fallingenemy[i].toDelete) {   // toDelete comes from drop 15
             fallingenemy.splice(i, 1);        // delete drop from array
+            console.log(fallingenemy.length);
+
         }
+        if (fallingenemy.length < 1) {
+            for (var i = 0; i < 6; i++) {
+                fallingenemy[i] = new fallingEnemy(i * 100 + 120, -400);
+            }
+        }
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 keydown = (event) => {
     if (event.code == "KeyW") {
@@ -186,18 +236,17 @@ keydown = (event) => {
     if (event.code == "Space") {
         shootPressed = true;
     }
-    if (event.code == "KeyP") {        
+    if (event.code == "KeyP") {
         if (pauseGame == false) {
             pauseGame = true;
         } else {
             pauseGame = false;
-    
+
         }
         //console.log("Pause = " + pauseGame);
-       // console.log("Unpause = " +unpauseGame);
+        // console.log("Unpause = " +unpauseGame);
     }
 };
-
 
 
 keyup = (event) => {
@@ -224,6 +273,15 @@ keyup = (event) => {
 
 function mousePressed() {
     //spawn bullet
-    var drop = new Fire(ship.x, height);
+    var drop = new Fire(ship.x, ship.y);
     fire.push(drop);
 }
+
+// spawn additional enemies
+// for (let i = 0; i < 5; i++) {
+//     let enemy = {
+//         x: random(100, width - 100),
+//         y: random(0, -1000),
+//     };
+//     enemies.push(enemy);
+// }
