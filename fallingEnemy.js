@@ -2,16 +2,16 @@
 function fallingEnemy(x, y) {
     this.x = x;
     this.y = y;
-    this.r = 30;  
+    this.r = 25;  
     this.xdir = 1;
   
     this.grow = function() {
       this.r = this.r + 2;
     }
   
-    this.shiftDown = function() {
-      this.xdir *= -1;
-      this.y += this.r;
+    this.turn = function() {
+     // this.xdir *= -1;
+      //this.y += 1;
     }
 
     this.kill = function() {
@@ -19,7 +19,7 @@ function fallingEnemy(x, y) {
     }
 
     this.move = function() {
-      //this.x = this.x + this.xdir;
+     // this.x = this.x + this.xdir;
       this.y -= -1;
 
     }

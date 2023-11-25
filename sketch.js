@@ -35,7 +35,7 @@ function preload() {
 
 function setup() {
 
-    createCanvas(800, 550);
+    createCanvas(800, 600);
     ship = new Ship();
     document.addEventListener("keydown", this.keydown);
     document.addEventListener("keyup", this.keyup);
@@ -43,7 +43,7 @@ function setup() {
     setTimeout(getfallingenemy, 2000);
     function getfallingenemy() {
         for (var i = 0; i < 3; i++) {
-            fallingenemy[i] = new fallingEnemy(i * 250 + 120, -100);
+            fallingenemy[i] = new fallingEnemy(i * 200 + 180, -100);
         }
         levelone = false;
     }
@@ -78,12 +78,12 @@ function draw() {
 
     textSize(22);
     fill('grey');
-    text('SCORE:', 510, 30);
+    text('SCORE:', 515, 30);
 
     textSize(22);
     fill('grey');
     // text('0000000', 630, 30);
-    text(score, 650, 30);
+    text(score, 655, 30);
 
     if (pauseGame) { // check for pause
         //checkbox.label = "Game Paused";      
@@ -109,13 +109,15 @@ function draw() {
     for (var i = 0; i < fallingenemy.length; i++) {
         fallingenemy[i].show();
         fallingenemy[i].move();
-        // if (flowers[i].x > width || flowers[i].x < 0) {
-        //     edge = true;
-        // }
-
-
+        if (fallingenemy[i].x > width || fallingenemy[i].x < 0) {
+            edge = true;
+        }
     }
-
+    if (edge) {
+        for (var i = 0; i < fallingenemy.length; i++) {
+            fallingenemy[i].turn();
+        }
+    }
     for (var i = 0; i < scrollingenemy.length; i++) {
         scrollingenemy[i].show();
         scrollingenemy[i].move();
@@ -140,7 +142,7 @@ function draw() {
         fire[i].show();
         fire[i].move();
 
-        if (fire[i].y < 0) {
+        if (fire[i].y < 0) {    // delete fire if if leaves the screen
             fire[i].evaporate();
 
         }
@@ -165,13 +167,9 @@ function draw() {
         }
     }
 
-     console.log("enemies " + fallingenemy.length);
+    console.log("enemies " + fallingenemy.length);
 
-    if (edge) {
-        for (var i = 0; i < scrollingenemy.length; i++) {
-            scrollingenemy[i].shiftDown();
-        }
-    }
+
 
     for (var i = fire.length - 1; i >= 0; i--) {
         if (fire[i].toDelete) {   // toDelete comes from drop 15
@@ -194,8 +192,8 @@ function draw() {
 
         }
         if (fallingenemy.length < 1) {
-            for (var i = 0; i < 6; i++) {
-                fallingenemy[i] = new fallingEnemy(i * 100 + 120, -400);
+            for (var i = 0; i < 4; i++) {
+                fallingenemy[i] = new fallingEnemy(i * 150 + 155, -400);
             }
         }
 

@@ -2,8 +2,8 @@
 function Ship() {
   this.x = width / 2;
   this.xdir = 0;
-  this.y = 450;
-  this.r = 80; 
+  this.y = 500;
+  this.r = 75; 
 
   this.show = function () {
   
@@ -14,11 +14,11 @@ function Ship() {
     if (this.x > width - 8) { // keep ship in frame
       this.x = width - 10;
     }
-    if (this.y < 30){
+    if (this.y < 300){
       this.y = 300;
     }
-    if (this.y > 450){
-      this.y = 450;
+    if (this.y > 500){
+      this.y = 500;
     }
   }
 
