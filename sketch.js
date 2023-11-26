@@ -10,6 +10,12 @@ let enemyImage;
 let planetexpress;
 var score = 0;
 
+let bg;
+let bgWidth;
+let bgHeight;
+let bgX = 0;
+let bgY = 0;
+
 let levelone = true;
 var edge = false;
 
@@ -26,7 +32,9 @@ function preload() {
     enemyImage = loadImage('enemy2.png');
     planetexpress = loadImage('planetexpress.png');
     font = loadFont('gamefont.ttf');
+    bg = loadImage("back.png");
 }
+
 
 
 
@@ -36,6 +44,10 @@ function preload() {
 function setup() {
 
     createCanvas(800, 600);
+    bgHeight = height;
+    bgWidth = width;
+    //console.log(bgWidth);
+   
     ship = new Ship();
     document.addEventListener("keydown", this.keydown);
     document.addEventListener("keyup", this.keyup);
@@ -68,7 +80,27 @@ function setup() {
 
 
 function draw() {
-    background(bgImage);
+    background('black');
+    
+
+    // image(bg, bgX, 0, bgWidth, bgHeight);
+    image(bg, bgX, bgY, bgWidth, bgHeight);
+
+    // image(bg, bgX + bgWidth, 0, bgWidth, bgHeight);
+    image(bg, bgX, bgY - bgHeight, bgWidth, bgHeight);
+    if (pauseGame) { // check for pause
+        //checkbox.label = "Game Paused";  
+        // bgY ;    
+        textFont(font);
+        textSize(32);
+        fill('grey');
+        text('Game Paused', 230, 230);
+        levelone = false;
+        return;
+    }
+
+    
+
     textFont(font);
 
     textSize(22);
@@ -85,15 +117,13 @@ function draw() {
     // text('0000000', 630, 30);
     text(score, 655, 30);
 
-    if (pauseGame) { // check for pause
-        //checkbox.label = "Game Paused";      
-        textFont(font);
-        textSize(32);
-        fill('grey');
-        text('Game Paused', 230, 230);
-        levelone = false;
-        return;
+   
+    bgY += 2;
+    //console.log(bgY);
+    if (bgY > bgHeight) {
+        bgY = 0;
     }
+
 
     if (levelone) {
         textFont(font);
@@ -167,7 +197,7 @@ function draw() {
         }
     }
 
-    console.log("enemies " + fallingenemy.length);
+    // console.log("enemies " + fallingenemy.length);
 
 
 
@@ -188,7 +218,7 @@ function draw() {
     for (var i = fallingenemy.length - 1; i >= 0; i--) {
         if (fallingenemy[i].toDelete) {   // toDelete comes from drop 15
             fallingenemy.splice(i, 1);        // delete drop from array
-            console.log(fallingenemy.length);
+            //   console.log(fallingenemy.length);
 
         }
         if (fallingenemy.length < 1) {
