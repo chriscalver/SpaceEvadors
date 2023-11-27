@@ -130,20 +130,43 @@ function draw() {
 
   //  setTimeout(fallingenemy.turn(), 5000);
 
+
+
+
+
     for (var i = 0; i < fallingenemy.length; i++) {
         fallingenemy[i].show();
         fallingenemy[i].move();
-        if (fallingenemy[i].y > 20 && fallingenemy[i].y < 80){
-            fallingenemy[i].turn();
+
+        if (fallingenemy[i].y > 10 && fallingenemy[i].y < 40){
+            fallingenemy[i].turn();            
+        }        
+
+        if (fallingenemy[i].y > 41 && fallingenemy[i].y < 42){
+            var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
+            torpedo.push(torp);      
+        } 
+       
+        if (fallingenemy[i].y > 42 && fallingenemy[i].y < 80){
+            fallingenemy[i].turnback();
         }  
-        if (fallingenemy[i].y > 120 && fallingenemy[i].y < 180){
-            //fallingenemy[i].xdir *= -1;
-           fallingenemy[i].turnback();
-        }  
-        if (fallingenemy[i].y > 220 && fallingenemy[i].y < 250){
+       
+        if (fallingenemy[i].y > 82 && fallingenemy[i].y < 120){
             //fallingenemy[i].xdir *= -1;
            fallingenemy[i].turn();
         } 
+
+        if (fallingenemy[i].y > 121 && fallingenemy[i].y < 122){
+            var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
+            torpedo.push(torp);      
+        } 
+
+        if (fallingenemy[i].y > 132 && fallingenemy[i].y < 200){
+            fallingenemy[i].turnback();
+        }
+
+
+
         if (fallingenemy[i].y > 620) {
 
             fallingenemy[i].kill();

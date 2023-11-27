@@ -5,7 +5,7 @@ function fallingEnemy(x, y, pic) {
     this.pic = pic;
     //this.pic.width*.1
     this.r = 20;
-    this.xdir = random([2, -2]);
+    this.xdir = random([3, -3]);
   
     this.grow = function() {
       this.r = this.r + 2;
