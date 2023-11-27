@@ -4,9 +4,12 @@ var scrollingenemy = [];
 var fallingenemy = [];
 var fallingenemy2 = [];
 var fire = [];
-let bgImage;
+var torpedo = [];
+//let bgImage;
 let playerImage;
 let enemyImage;
+let enemyImage2;
+let enemyImage3;
 let planetexpress;
 var score = 0;
 
@@ -17,6 +20,7 @@ let bgX = 0;
 let bgY = 0;
 
 let levelone = true;
+let wave = 0;
 var edge = false;
 
 let rightPressed = false;
@@ -27,19 +31,15 @@ let shootPressed = false;
 let pauseGame = false;
 
 function preload() {
-    bgImage = loadImage('back.png');
-    playerImage = loadImage('player.png');
-    enemyImage = loadImage('enemy2.png');
+   // bgImage = loadImage('back.png');
+    playerImage = loadImage('guitar.png');
+    enemyImage = loadImage('enemy1.png');
+    enemyImage2 = loadImage('enemy2.png');
+    //enemyImage3 = loadImage('enemy3.png');
     planetexpress = loadImage('planetexpress.png');
     font = loadFont('gamefont.ttf');
     bg = loadImage("back.png");
 }
-
-
-
-
-
-
 
 function setup() {
 
@@ -55,9 +55,10 @@ function setup() {
     setTimeout(getfallingenemy, 2000);
     function getfallingenemy() {
         for (var i = 0; i < 3; i++) {
-            fallingenemy[i] = new fallingEnemy(i * 200 + 180, -100);
+            fallingenemy[i] = new fallingEnemy(i * 75 + 275, random(-100, -700), enemyImage);
         }
         levelone = false;
+        wave = 1;
     }
     setTimeout(getscrollingenemy, 9000);
     function getscrollingenemy() {       //scrolling futurama ship
@@ -69,20 +70,10 @@ function setup() {
 
 
 
-
-
-
-
-
-
-
-
-
-
 function draw() {
     background('black');
     
-
+    console.log("waves =" + wave);
     // image(bg, bgX, 0, bgWidth, bgHeight);
     image(bg, bgX, bgY, bgWidth, bgHeight);
 
@@ -131,22 +122,45 @@ function draw() {
 
         fill('grey');
         text('Level One', 260, 230);
+        text('Stratocasters', 200, 300);
     }
     rectMode(CENTER);
     ship.show();
     ship.move();
 
+  //  setTimeout(fallingenemy.turn(), 5000);
+
     for (var i = 0; i < fallingenemy.length; i++) {
         fallingenemy[i].show();
         fallingenemy[i].move();
-        if (fallingenemy[i].x > width || fallingenemy[i].x < 0) {
-            edge = true;
+        if (fallingenemy[i].y > 20 && fallingenemy[i].y < 80){
+            fallingenemy[i].turn();
+        }  
+        if (fallingenemy[i].y > 120 && fallingenemy[i].y < 180){
+            //fallingenemy[i].xdir *= -1;
+           fallingenemy[i].turnback();
+        }  
+        if (fallingenemy[i].y > 220 && fallingenemy[i].y < 250){
+            //fallingenemy[i].xdir *= -1;
+           fallingenemy[i].turn();
+        } 
+        if (fallingenemy[i].y > 620) {
+
+            fallingenemy[i].kill();
         }
+        // if (fallingenemy[i].x > width || fallingenemy[i].x < 0) {
+        //     edge = true;
+        // }
     }
+
+
+
+
     if (edge) {
         for (var i = 0; i < fallingenemy.length; i++) {
-            fallingenemy[i].turn();
+            fallingenemy[i].shift();
         }
+        
     }
     for (var i = 0; i < scrollingenemy.length; i++) {
         scrollingenemy[i].show();
@@ -154,10 +168,7 @@ function draw() {
         // if (flowers[i].x > width || flowers[i].x < 0) {
         //     edge = true;
         // }
-        if (fallingenemy[i].y > 550) {
-            fallingenemy[i].kill();
-
-        }
+        
     }
 
 
@@ -197,6 +208,37 @@ function draw() {
         }
     }
 
+
+
+    for (var i = 0; i < torpedo.length; i++) {
+        torpedo[i].show();
+        torpedo[i].move();
+
+        // if (torpedo[i].y < 0) {    // delete fire if if leaves the screen
+        //     torpedo[i].evaporate();
+
+        // }
+
+        //collision detection
+        // for (var j = 0; j < scrollingenemy.length; j++) {
+        //     if (fire[i].hits(scrollingenemy[j])) {
+        //         scrollingenemy[j].kill();
+        //         //scrollingenemy[j].grow();
+        //         fire[i].evaporate();
+        //         score += 100;
+        //     }
+        // }
+
+        
+    }
+
+
+
+
+
+
+
+
     // console.log("enemies " + fallingenemy.length);
 
 
@@ -223,8 +265,9 @@ function draw() {
         }
         if (fallingenemy.length < 1) {
             for (var i = 0; i < 4; i++) {
-                fallingenemy[i] = new fallingEnemy(i * 150 + 155, -400);
+                fallingenemy[i] = new fallingEnemy(i * 150 + 155, random(-100, -500), enemyImage2);
             }
+            wave += 1;
         }
 
     }
@@ -300,9 +343,11 @@ keyup = (event) => {
 };
 
 function mousePressed() {
-    //spawn bullet
+   
     var drop = new Fire(ship.x, ship.y);
     fire.push(drop);
+    //var torp =  new Torpedo(fallingenemy[1].x, fallingenemy[1].y);
+  //  torpedo.push(torp);
 }
 
 // spawn additional enemies

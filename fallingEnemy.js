@@ -1,17 +1,23 @@
 
-function fallingEnemy(x, y) {
+function fallingEnemy(x, y, pic) {
     this.x = x;
     this.y = y;
-    this.r = 25;  
-    this.xdir = 1;
+    this.pic = pic;
+    //this.pic.width*.1
+    this.r = 20;
+    this.xdir = random([2, -2]);
   
     this.grow = function() {
       this.r = this.r + 2;
     }
   
     this.turn = function() {
-     // this.xdir *= -1;
-      //this.y += 1;
+     //this.xdir *= -1;
+     this.x += this.xdir;
+    }
+
+    this.turnback = function() {
+      this.x += this.xdir * -1;       
     }
 
     this.kill = function() {
@@ -20,8 +26,7 @@ function fallingEnemy(x, y) {
 
     this.move = function() {
      // this.x = this.x + this.xdir;
-      this.y -= -1;
-
+      this.y += .8;
     }
     
     this.shift = function() {
@@ -30,12 +35,14 @@ function fallingEnemy(x, y) {
       this.x -= 1;
       this.y -= 1;      
     }
+
+    
     
 
     this.show = function() {
       noStroke();
       fill(255, 0, 200, 150);
-      image(enemyImage, this.x, this.y, this.r*2, this.r*2);  //enemy.png 
+      image(this.pic, this.x, this.y, this.pic.width*.15, this.pic.height*.15);  //enemy.png 
     }  
   }
   

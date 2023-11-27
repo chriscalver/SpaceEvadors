@@ -2,8 +2,8 @@
 function Ship() {
   this.x = width / 2;
   this.xdir = 0;
-  this.y = 500;
-  this.r = 75; 
+  this.y = 450;
+  this.r = 100; 
 
   this.show = function () {
   
