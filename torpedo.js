@@ -9,7 +9,7 @@ function Torpedo(x, y) {
   this.show = function () {
     noStroke();
     fill(250, 0, 0);
-    ellipse(this.x, this.y, this.r * 2, this.r * 2);
+    ellipse(this.x + 18, this.y + 90, this.r * 2, this.r * 2);
   }
 
   this.evaporate = function () { // send back for deletion
@@ -38,7 +38,7 @@ function Torpedo(x, y) {
   //   }
   // }
   this.move = function () {
-    this.y = this.y + 10;
+    this.y = this.y + 8;
   }
 }
 
