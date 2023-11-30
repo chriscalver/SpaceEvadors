@@ -5,6 +5,12 @@ var fallingenemy = [];
 var fallingenemy2 = [];
 var fire = [];
 var torpedo = [];
+
+let spritesheet;
+let sprites = [];
+let spritelength = 128;
+let spritedistance = 30;
+
 //let bgImage;
 let playerImage;
 let enemyImage;
@@ -31,7 +37,7 @@ let shootPressed = false;
 let pauseGame = false;
 
 function preload() {
-   // bgImage = loadImage('back.png');
+    // bgImage = loadImage('back.png');
     playerImage = loadImage('guitar.png');
     enemyImage = loadImage('enemy1.png');
     enemyImage2 = loadImage('enemy2.png');
@@ -39,6 +45,8 @@ function preload() {
     planetexpress = loadImage('planetexpress.png');
     font = loadFont('gamefont.ttf');
     bg = loadImage("back.png");
+
+    spritesheet = loadImage("shipfire.png");
 }
 
 function setup() {
@@ -47,7 +55,21 @@ function setup() {
     bgHeight = height;
     bgWidth = width;
     //console.log(bgWidth);
-   
+
+    let w = spritesheet.width / 4;
+    let h = spritesheet.height;
+    console.log(w);
+    console.log(h);
+    //x = width / 2;
+   // y = height / 2;
+    for (let x = 0; x < 4; x++) {
+        // get the image subsection there and then stor in the array
+        sprites[x] = spritesheet.get(x * w, 0, w, h);  // first 2 are top left coorinates
+    }
+
+    console.log(sprites);
+
+
     ship = new Ship();
     document.addEventListener("keydown", this.keydown);
     document.addEventListener("keyup", this.keyup);
@@ -72,7 +94,7 @@ function setup() {
 
 function draw() {
     background('black');
-    
+
     console.log("waves =" + wave);
     // image(bg, bgX, 0, bgWidth, bgHeight);
     image(bg, bgX, bgY, bgWidth, bgHeight);
@@ -90,7 +112,7 @@ function draw() {
         return;
     }
 
-    
+
 
     textFont(font);
 
@@ -108,13 +130,20 @@ function draw() {
     // text('0000000', 630, 30);
     text(score, 655, 30);
 
-   
+
     bgY += 2;
     //console.log(bgY);
     if (bgY > bgHeight) {
         bgY = 0;
     }
 
+    let x = width / 2;
+    let y = height / 2;
+    // for (var i = 0; i < 3; i++) {
+    //     image(sprites[i], x, y, 256, 256);
+    // }
+
+    image(sprites[frameCount % 4], ship.x - 64, ship.y + spritedistance, 128, spritelength);
 
     if (levelone) {
         textFont(font);
@@ -128,9 +157,11 @@ function draw() {
     ship.show();
     ship.move();
 
-  //  setTimeout(fallingenemy.turn(), 5000);
+    //  setTimeout(fallingenemy.turn(), 5000);
 
-
+    // let x = width /2;
+    // let y = height /2;
+    // image(sprites[0], x, y);
 
 
 
@@ -138,30 +169,30 @@ function draw() {
         fallingenemy[i].show();
         fallingenemy[i].move();
 
-        if (fallingenemy[i].y > 10 && fallingenemy[i].y < 40){
-            fallingenemy[i].turn();            
-        }        
+        if (fallingenemy[i].y > 10 && fallingenemy[i].y < 40) {
+            fallingenemy[i].turn();
+        }
 
-        if (fallingenemy[i].y > 41 && fallingenemy[i].y < 42){
+        if (fallingenemy[i].y > 41 && fallingenemy[i].y < 42) {
             var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
-            torpedo.push(torp);      
-        } 
-       
-        if (fallingenemy[i].y > 42 && fallingenemy[i].y < 80){
+            torpedo.push(torp);
+        }
+
+        if (fallingenemy[i].y > 42 && fallingenemy[i].y < 80) {
             fallingenemy[i].turnback();
-        }  
-       
-        if (fallingenemy[i].y > 82 && fallingenemy[i].y < 120){
+        }
+
+        if (fallingenemy[i].y > 82 && fallingenemy[i].y < 120) {
             //fallingenemy[i].xdir *= -1;
-           fallingenemy[i].turn();
-        } 
+            fallingenemy[i].turn();
+        }
 
-        if (fallingenemy[i].y > 121 && fallingenemy[i].y < 122){
+        if (fallingenemy[i].y > 121 && fallingenemy[i].y < 122) {
             var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
-            torpedo.push(torp);      
-        } 
+            torpedo.push(torp);
+        }
 
-        if (fallingenemy[i].y > 132 && fallingenemy[i].y < 200){
+        if (fallingenemy[i].y > 132 && fallingenemy[i].y < 200) {
             fallingenemy[i].turnback();
         }
 
@@ -183,7 +214,7 @@ function draw() {
         for (var i = 0; i < fallingenemy.length; i++) {
             fallingenemy[i].shift();
         }
-        
+
     }
     for (var i = 0; i < scrollingenemy.length; i++) {
         scrollingenemy[i].show();
@@ -191,7 +222,7 @@ function draw() {
         // if (flowers[i].x > width || flowers[i].x < 0) {
         //     edge = true;
         // }
-        
+
     }
 
 
@@ -252,7 +283,7 @@ function draw() {
         //     }
         // }
 
-        
+
     }
 
 
@@ -300,23 +331,39 @@ function draw() {
 
 
 
-
-
-
-
-
-
-
-
+if (spritelength > 150) {
+    spritelength = 150;
+}
 
 keydown = (event) => {
     if (event.code == "KeyW") {
         downPressed = true;
+        spritelength += 50;
+        if (spritelength > 250) {
+            spritelength = 250;
+        }
+        spritedistance -= 25;
+       //  console.log(spritedistance);
+        if (spritedistance <= -35) {
+            spritedistance = -35;
+        //    console.log(spritedistance);
+        }
+
         // console.log("right");
     }
     if (event.code == "KeyX") {
         upPressed = true;
-        // console.log("right");
+        spritelength -= 50;
+        if (spritelength <= 128) {
+            spritelength = 128;
+        }
+        spritedistance += 25;
+        // console.log(spritedistance);
+        if (spritedistance >= 30) {
+            spritedistance = 30;
+           // console.log(spritedistance);
+        }
+
     }
 
     if (event.code == "KeyD") {
@@ -366,11 +413,11 @@ keyup = (event) => {
 };
 
 function mousePressed() {
-   
+
     var drop = new Fire(ship.x, ship.y);
     fire.push(drop);
     //var torp =  new Torpedo(fallingenemy[1].x, fallingenemy[1].y);
-  //  torpedo.push(torp);
+    //  torpedo.push(torp);
 }
 
 // spawn additional enemies

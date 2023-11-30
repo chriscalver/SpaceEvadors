@@ -17,8 +17,8 @@ function Ship() {
     if (this.y < 300){
       this.y = 300;
     }
-    if (this.y > 500){
-      this.y = 500;
+    if (this.y > 400){
+      this.y = 400;
     }
   }
 
