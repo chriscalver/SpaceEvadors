@@ -2,9 +2,11 @@ let enemies = [];
 var ship;
 var scrollingenemy = [];
 var fallingenemy = [];
+var angle = 0;
 var fallingenemy2 = [];
 var fire = [];
 var torpedo = [];
+
 
 let spritesheet;
 let sprites = [];
@@ -52,6 +54,7 @@ function preload() {
 function setup() {
 
     createCanvas(800, 600);
+    angleMode(DEGREES);
     bgHeight = height;
     bgWidth = width;
     //console.log(bgWidth);
