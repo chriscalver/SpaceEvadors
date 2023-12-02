@@ -12,6 +12,11 @@ let spritesheet;
 let sprites = [];
 let spritelength = 128;
 let spritedistance = 30;
+let explosionSpritesheet;
+let explosionSprites = [];
+// let x;
+// let y;
+
 
 //let bgImage;
 let playerImage;
@@ -19,6 +24,7 @@ let enemyImage;
 let enemyImage2;
 let enemyImage3;
 let planetexpress;
+let menuImage;
 var score = 0;
 
 let bg;
@@ -47,12 +53,12 @@ function preload() {
     planetexpress = loadImage('planetexpress.png');
     font = loadFont('gamefont.ttf');
     bg = loadImage("back.png");
-
+    menuImage = loadImage("menu.png");
     spritesheet = loadImage("shipfire.png");
+    explosionSpritesheet = loadImage("explosion.png");
 }
 
 function setup() {
-
     createCanvas(800, 600);
     angleMode(DEGREES);
     bgHeight = height;
@@ -61,16 +67,62 @@ function setup() {
 
     let w = spritesheet.width / 4;
     let h = spritesheet.height;
-    console.log(w);
-    console.log(h);
+    // console.log(w);
+    // console.log(h);
     //x = width / 2;
-   // y = height / 2;
+    // y = height / 2;
     for (let x = 0; x < 4; x++) {
         // get the image subsection there and then stor in the array
         sprites[x] = spritesheet.get(x * w, 0, w, h);  // first 2 are top left coorinates
     }
-
     console.log(sprites);
+
+    let explWidth = explosionSpritesheet.width / 8;   //  256
+    let explHeight = explosionSpritesheet.height / 6;  // 256
+    // console.log(explWidth);
+    // console.log(explHeight);
+     // there are six rows, create a for loop to iterate through them 
+    for (let y = 0; y < 6; y++) {
+        // create another emoty array for that row
+        explosionSprites[y] = [];
+        // there are 8 images in a row, iterate through them
+        for (let x = 0; x < 8; x++) {
+            // get the image subsection there and then stor in the array
+            explosionSprites[y][x] = explosionSpritesheet.get(x * explWidth, y * explHeight, explWidth, explHeight);
+        }
+    }
+
+
+
+    // for (let y = 0; y < 6; y++) {
+    //     // create another emoty array for that row
+    //     explosionSprites[y] = explosionSpritesheet.get(y * explWidth, 0, explWidth, explHeight);
+    //     // there are 8 images in a row, iterate through them
+    //     // for (let x = 0; x < 8; x++) {
+    //     //     // get the image subsection there and then stor in the array
+    //     //     explosionSprites[y][x] = explosionSpritesheet.get(x * explWidth, y * explHeight, explWidth, explHeight);
+    //     // }
+    // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //   x = width / 2;
+    //   y = height / 2;
+
+    console.log(explosionSprites);
+
+    console.log(explWidth);
+    console.log(explHeight);
 
 
     ship = new Ship();
@@ -140,13 +192,19 @@ function draw() {
         bgY = 0;
     }
 
-    let x = width / 2;
-    let y = height / 2;
+    // let x = width / 2;
+    // let y = height / 2;
     // for (var i = 0; i < 3; i++) {
     //     image(sprites[i], x, y, 256, 256);
     // }
 
     image(sprites[frameCount % 4], ship.x - 64, ship.y + spritedistance, 128, spritelength);
+    
+    // image(explosionSprites[frameCount % 6][frameCount % 8], ship.x - 64, ship.y, 64, 64);
+
+    // image(explosionSprites[4][frameCount % 8], ship.x - 124, ship.y, 64, 64);
+
+   // image(sprites[direction][step], x, y);
 
     if (levelone) {
         textFont(font);
@@ -328,6 +386,8 @@ function draw() {
         }
 
     }
+
+    image(menuImage, 0, 550, 800, 50);
 }
 
 
@@ -346,10 +406,10 @@ keydown = (event) => {
             spritelength = 250;
         }
         spritedistance -= 25;
-       //  console.log(spritedistance);
+        //  console.log(spritedistance);
         if (spritedistance <= -35) {
             spritedistance = -35;
-        //    console.log(spritedistance);
+            //    console.log(spritedistance);
         }
 
         // console.log("right");
@@ -364,7 +424,7 @@ keydown = (event) => {
         // console.log(spritedistance);
         if (spritedistance >= 30) {
             spritedistance = 30;
-           // console.log(spritedistance);
+            // console.log(spritedistance);
         }
 
     }
@@ -390,7 +450,7 @@ keydown = (event) => {
         //console.log("Pause = " + pauseGame);
         // console.log("Unpause = " +unpauseGame);
     }
-};
+}
 
 
 keyup = (event) => {
@@ -400,11 +460,11 @@ keyup = (event) => {
     if (event.code == "KeyA") {
         leftPressed = false;
     }
-    if (event.code == "Space") {
-        var drop = new Fire(ship.x, height);
-        fire.push(drop);
-        // shootPressed = false;
-    }
+    // if (event.code == "Space") {
+    //     var drop = new Fire(ship.x, height);
+    //     fire.push(drop);
+    //     // shootPressed = false;
+    // }
     if (event.code == "KeyW") {
         downPressed = false;
         // console.log("right");
