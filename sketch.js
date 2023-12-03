@@ -2,7 +2,10 @@ let enemies = [];
 var ship;
 var scrollingenemy = [];
 var fallingenemy = [];
+let fallingenemyX = 0;
+let fallingenemyY = 0;
 var angle = 0;
+
 var fallingenemy2 = [];
 var fire = [];
 var torpedo = [];
@@ -14,6 +17,11 @@ let spritelength = 128;
 let spritedistance = 30;
 let explosionSpritesheet;
 let explosionSprites = [];
+let animation = [];
+let explode = false;
+let explodecounter = 0;
+
+let blowup;
 // let x;
 // let y;
 
@@ -56,6 +64,9 @@ function preload() {
     menuImage = loadImage("menu.png");
     spritesheet = loadImage("shipfire.png");
     explosionSpritesheet = loadImage("explosion.png");
+
+
+
 }
 
 function setup() {
@@ -64,6 +75,14 @@ function setup() {
     bgHeight = height;
     bgWidth = width;
     //console.log(bgWidth);
+
+
+
+    //blowup = new Bomb(1, animation);
+
+
+
+
 
     let w = spritesheet.width / 4;
     let h = spritesheet.height;
@@ -75,13 +94,14 @@ function setup() {
         // get the image subsection there and then stor in the array
         sprites[x] = spritesheet.get(x * w, 0, w, h);  // first 2 are top left coorinates
     }
-    console.log(sprites);
+    //console.log(sprites);
+
 
     let explWidth = explosionSpritesheet.width / 8;   //  256
     let explHeight = explosionSpritesheet.height / 6;  // 256
     // console.log(explWidth);
     // console.log(explHeight);
-     // there are six rows, create a for loop to iterate through them 
+    // there are six rows, create a for loop to iterate through them 
     for (let y = 0; y < 6; y++) {
         // create another emoty array for that row
         explosionSprites[y] = [];
@@ -89,8 +109,18 @@ function setup() {
         for (let x = 0; x < 8; x++) {
             // get the image subsection there and then stor in the array
             explosionSprites[y][x] = explosionSpritesheet.get(x * explWidth, y * explHeight, explWidth, explHeight);
+            animation.push(explosionSpritesheet.get(x * explWidth, y * explHeight, explWidth, explHeight));
+
         }
     }
+
+
+
+    blowup = new Bomb(0.9, animation);
+    // console.log()
+
+
+
 
 
 
@@ -104,35 +134,24 @@ function setup() {
     //     // }
     // }
 
-
-
-
-
-
-
-
-
-
-
-
-
     //   x = width / 2;
     //   y = height / 2;
 
-    console.log(explosionSprites);
+    //console.log(explosionSprites);
+   // console.log(animation);
 
-    console.log(explWidth);
-    console.log(explHeight);
+    // console.log(explWidth);
+    // console.log(explHeight);
 
 
     ship = new Ship();
     document.addEventListener("keydown", this.keydown);
     document.addEventListener("keyup", this.keyup);
 
-    setTimeout(getfallingenemy, 2000);
+    setTimeout(getfallingenemy, 1000);
     function getfallingenemy() {
         for (var i = 0; i < 3; i++) {
-            fallingenemy[i] = new fallingEnemy(i * 75 + 275, random(-100, -700), enemyImage);
+            fallingenemy[i] = new fallingEnemy(i * 75 + 275, random(-100, -600), enemyImage);
         }
         levelone = false;
         wave = 1;
@@ -143,14 +162,28 @@ function setup() {
             scrollingenemy[i] = new scrollingEnemy(-120, -20);
         }
     }
+    //console.log(explode);
 }
+
+// draw area
+
+
+
+
+
+
 
 
 
 function draw() {
     background('black');
 
-    console.log("waves =" + wave);
+    //console.log(explode);
+    // blowup.show();
+    // blowup.animate();
+
+
+    //console.log("waves =" + wave);
     // image(bg, bgX, 0, bgWidth, bgHeight);
     image(bg, bgX, bgY, bgWidth, bgHeight);
 
@@ -191,7 +224,33 @@ function draw() {
     if (bgY > bgHeight) {
         bgY = 0;
     }
+    if (explode) {
 
+        blowup.show();
+        blowup.animate();
+        console.log(explode);
+
+
+        explodecounter += 1;
+
+        
+        if (blowup.index >= blowup.len) {
+            console.log("Hey");
+            explode = false;
+            blowup.index = 0;
+
+        }
+
+        // if (explodecounter >= 60){
+        // //    explode = false;
+        //     //explodecounter = 0;
+        //       console.log("Hey" + explode);
+
+        // }
+        
+    }
+
+    
     // let x = width / 2;
     // let y = height / 2;
     // for (var i = 0; i < 3; i++) {
@@ -199,12 +258,15 @@ function draw() {
     // }
 
     image(sprites[frameCount % 4], ship.x - 64, ship.y + spritedistance, 128, spritelength);
-    
+
     // image(explosionSprites[frameCount % 6][frameCount % 8], ship.x - 64, ship.y, 64, 64);
 
-    // image(explosionSprites[4][frameCount % 8], ship.x - 124, ship.y, 64, 64);
+    // image(explosionSprites[frameCount % 6][frameCount % 8], ship.x - 124, ship.y, 64, 64);
 
-   // image(sprites[direction][step], x, y);
+    //  image(animation[frameCount % animation.length], ship.x - 224, ship.y, 64, 64);
+    //  image(animation[frameCount % 48], ship.x - 224, ship.y, 64, 64);
+
+    // image(sprites[direction][step], x, y);
 
     if (levelone) {
         textFont(font);
@@ -271,6 +333,9 @@ function draw() {
 
 
 
+    //      blowup.show();
+    //   blowup.animate();
+
     if (edge) {
         for (var i = 0; i < fallingenemy.length; i++) {
             fallingenemy[i].shift();
@@ -318,6 +383,7 @@ function draw() {
                 //fallingenemy[j].grow();        //  drop hits flower and grows
                 fallingenemy[j].kill();
                 fire[i].evaporate();
+
                 score += 50;
             }
         }
@@ -367,6 +433,11 @@ function draw() {
 
     for (var i = scrollingenemy.length - 1; i >= 0; i--) {
         if (scrollingenemy[i].toDelete) {   // toDelete comes from drop 15
+            fallingenemyX = scrollingenemy[i].x + 100;
+            fallingenemyY = scrollingenemy[i].y + 35;
+            explode = true;
+
+
             scrollingenemy.splice(i, 1);        // delete drop from array
         }
     }
@@ -374,7 +445,18 @@ function draw() {
 
     for (var i = fallingenemy.length - 1; i >= 0; i--) {
         if (fallingenemy[i].toDelete) {   // toDelete comes from drop 15
-            fallingenemy.splice(i, 1);        // delete drop from array
+
+            fallingenemyX = fallingenemy[i].x;
+            fallingenemyY = fallingenemy[i].y;
+
+
+            console.log(fallingenemyX);
+
+
+
+            fallingenemy.splice(i, 1);        // delete from array
+            explode = true;
+            console.log(explode);
             //   console.log(fallingenemy.length);
 
         }
@@ -391,7 +473,7 @@ function draw() {
 }
 
 
-
+//console.log(explode);
 
 
 if (spritelength > 150) {
