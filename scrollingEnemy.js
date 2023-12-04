@@ -2,8 +2,8 @@
 function scrollingEnemy(x, y) {                //planet express ship
     this.x = x;
     this.y = y;
-    this.r = 80;  
-    this.xdir = 2;
+    this.r = 80;
+    this.xdir = .8;
     this.toDelete = false;
   
     this.grow = function() {

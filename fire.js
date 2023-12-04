@@ -19,12 +19,12 @@ function Fire(x, y) {
   //collison detection
 
   this.hits = function (scrollingenemy) {
-    var d = dist(this.x, this.y, scrollingenemy.x + 78, scrollingenemy.y);
-
-    if (d < this.r + scrollingenemy.r) {
-      return true;
+    var d = dist(this.x, this.y, scrollingenemy.x + 70, scrollingenemy.y);
+    
+if (d < this.r + scrollingenemy.r) {
+            return true;
     } else {
-      return false;
+            return false;
     }
   }
 
