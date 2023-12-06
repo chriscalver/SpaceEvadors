@@ -1,4 +1,4 @@
-let enemies = [];
+//let enemies = [];
 var ship;
 var scrollingenemy = [];
 var fallingenemy = [];
@@ -37,7 +37,10 @@ let bgHeight;
 let bgX = 0;
 let bgY = 0;
 
-let levelone = true;
+let intro = true;
+let leveloneintro = false
+let levelone = false;
+let leveltwointro = false
 let leveltwo = false;
 let wave = 0;
 var edge = false;
@@ -71,10 +74,8 @@ function setup() {
     bgWidth = width;
 
     let w = spritesheet.width / 4;
-    let h = spritesheet.height;
-   
-    for (let x = 0; x < 4; x++) {
-        // get the image subsection there and then stor in the array
+    let h = spritesheet.height;   
+    for (let x = 0; x < 4; x++) {       
         sprites[x] = spritesheet.get(x * w, 0, w, h);  // first 2 are top left coorinates
     }
   
@@ -93,37 +94,32 @@ function setup() {
         }
     }
 
-    blowup = new Bomb(0.9, animation);
-    // console.log();
-    // for (let y = 0; y < 6; y++) {
-    //     // create another emoty array for that row
-    //     explosionSprites[y] = explosionSpritesheet.get(y * explWidth, 0, explWidth, explHeight);
-    //     // there are 8 images in a row, iterate through them
-    //     // for (let x = 0; x < 8; x++) {
-    //     //     // get the image subsection there and then stor in the array
-    //     //     explosionSprites[y][x] = explosionSpritesheet.get(x * explWidth, y * explHeight, explWidth, explHeight);
-    //     // }
-    // }
-   
+    blowup = new Bomb(0.9, animation);    
+
     ship = new Ship();
     document.addEventListener("keydown", this.keydown);
-    document.addEventListener("keyup", this.keyup);
+    document.addEventListener("keyup", this.keyup);    
 
-    setTimeout(getfallingenemy, 1000);
-    function getfallingenemy() {
-        for (var i = 0; i < 3; i++) {
-            fallingenemy[i] = new fallingEnemy(i * 75 + 275, random(-100, -600), enemyImage);
-        }
-        levelone = false;
-        wave = 1;
+        setTimeout(getfallingenemy, 1000);
+        function getfallingenemy() {
+            for (var i = 0; i < 3; i++) {
+                fallingenemy[i] = new fallingEnemy(i * 75 + 275, random(-100, -600), enemyImage);
+            }
+            leveloneintro = false;
+            //leveltwo = false;
+            wave = 1;
 
-    }
-    setTimeout(getscrollingenemy, 10000);
-    function getscrollingenemy() {       //scrolling futurama ship
-        for (var i = 0; i < 1; i++) {
-            scrollingenemy[i] = new scrollingEnemy(-120, -20);
+    
         }
-    }   
+        setTimeout(getscrollingenemy, 1000);
+        function getscrollingenemy() {       //scrolling futurama ship
+            for (var i = 0; i < 1; i++) {
+                scrollingenemy[i] = new scrollingEnemy(-1520, -20);
+            }
+        }
+
+        
+      
 }
 
 // draw area
@@ -132,9 +128,9 @@ function draw() {
     background('black');
     console.log("wave = " + wave);
 
-    if(wave >= 3){
-        leveltwo = true;
-
+    if(wave == 2){
+        leveltwointro = true;
+        
 
 
         //console.log("HHHHHHHHHHHHHHHHH");
@@ -147,22 +143,55 @@ function draw() {
         textSize(32);
         fill('grey');
         text('Game Paused', 230, 230);
-        levelone = false;
+        //levelone = false;
         return;
     }
 
-    textFont(font);
-    textSize(22);
-    fill('grey');
-    text('Level One', 50, 30);
+    if(intro){
 
-    textSize(22);
-    fill('grey');
-    text('SCORE:', 515, 30);
+        textFont(font);
+        textSize(34);
+        fill('grey');
+        text('Guitar Wars', 210, 230);
+        textSize(22);
+        text('Press Spacebar to start', 150, 300);
+    }
 
-    textSize(22);
-    fill('grey');   
-    text(score, 655, 30);
+    if (leveloneintro) {
+        textFont(font);
+        textSize(32);
+
+        fill('grey');
+        text('Level One', 260, 230);
+        text('Stratocasters', 200, 300);
+
+        setTimeout(levelonepause, 2000);
+        function levelonepause() {       //scrolling futurama ship
+            levelone = true;
+           leveloneintro = false;
+
+        }
+
+    }
+    
+
+    if(levelone){
+        textFont(font);
+        textSize(22);
+        fill('grey');
+        text('Level One', 50, 30);
+    
+        textSize(22);
+        fill('grey');
+        text('SCORE:', 515, 30);
+    
+        textSize(22);
+        fill('grey');   
+        text(score, 655, 30);
+
+    }
+
+    
 
     bgY += 2;
     //console.log(bgY);
@@ -185,95 +214,147 @@ function draw() {
     }
 
 
-    image(sprites[frameCount % 4], ship.x - 64, ship.y + spritedistance, 128, spritelength);
-
-    if (levelone) {
-        textFont(font);
-        textSize(32);
-
-        fill('grey');
-        text('Level One', 260, 230);
-        text('Stratocasters', 200, 300);
-    }
-
-    if (leveltwo) {
+    if (leveltwointro) {
         textFont(font);
         textSize(32);
 
         fill('grey');
         text('Level Two', 260, 230);
         text('Les Pauls', 260, 300);
-        //fallingenemy = 0;
+       // fallingenemy = [];
+       // scrollingenemy = [];
+
+        setTimeout(leveltwopause, 2000);
+        function leveltwopause() {       //scrolling futurama ship
+            leveltwo = true;
+            leveltwointro = false;
+            wave = 1;
+        }
+
+    }
+
+    rectMode(CENTER);
+    ship.show();
+    ship.move();       
+    image(sprites[frameCount % 4], ship.x - 64, ship.y + spritedistance, 128, spritelength);
+
+
+    if(levelone){
+
+        for (var i = 0; i < fallingenemy.length; i++) {
+            fallingenemy[i].show();
+            fallingenemy[i].move();
+    
+            if (fallingenemy[i].y > 10 && fallingenemy[i].y < 40) {
+                fallingenemy[i].turn();
+            }
+    
+            if (fallingenemy[i].y > 41 && fallingenemy[i].y < 42) {
+                var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
+                torpedo.push(torp);
+            }
+    
+            if (fallingenemy[i].y > 42 && fallingenemy[i].y < 80) {
+                fallingenemy[i].turnback();
+            }
+    
+            if (fallingenemy[i].y > 82 && fallingenemy[i].y < 120) {
+                //fallingenemy[i].xdir *= -1;
+                fallingenemy[i].turn();
+            }
+    
+            if (fallingenemy[i].y > 121 && fallingenemy[i].y < 122) {
+                var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
+                torpedo.push(torp);
+            }
+    
+            if (fallingenemy[i].y > 132 && fallingenemy[i].y < 200) {
+                fallingenemy[i].turnback();
+            }
+    
+            if (fallingenemy[i].y > 620) {
+    
+                fallingenemy[i].kill();
+            }
+            // if (fallingenemy[i].x > width || fallingenemy[i].x < 0) {
+            //     edge = true;
+            // }
+        }  
 
 
 
+
+        for (var i = 0; i < scrollingenemy.length; i++) {
+            scrollingenemy[i].show();
+            scrollingenemy[i].move();       
+        }
 
     }
 
 
-    rectMode(CENTER);
-    ship.show();
-    ship.move();
-  
-    for (var i = 0; i < fallingenemy.length; i++) {
-        fallingenemy[i].show();
-        fallingenemy[i].move();
 
-        if (fallingenemy[i].y > 10 && fallingenemy[i].y < 40) {
-            fallingenemy[i].turn();
-        }
 
-        if (fallingenemy[i].y > 41 && fallingenemy[i].y < 42) {
-            var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
-            torpedo.push(torp);
-        }
+    if(leveltwo){
 
-        if (fallingenemy[i].y > 42 && fallingenemy[i].y < 80) {
-            fallingenemy[i].turnback();
-        }
+        // for (var i = 0; i < fallingenemy.length; i++) {
+        //     fallingenemy[i].show();
+        //     fallingenemy[i].move();
+    
+        //     if (fallingenemy[i].y > 10 && fallingenemy[i].y < 40) {
+        //         fallingenemy[i].turn();
+        //     }
+    
+        //     if (fallingenemy[i].y > 41 && fallingenemy[i].y < 42) {
+        //         var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
+        //         torpedo.push(torp);
+        //     }
+    
+        //     if (fallingenemy[i].y > 42 && fallingenemy[i].y < 80) {
+        //         fallingenemy[i].turnback();
+        //     }
+    
+        //     if (fallingenemy[i].y > 82 && fallingenemy[i].y < 120) {
+        //         //fallingenemy[i].xdir *= -1;
+        //         fallingenemy[i].turn();
+        //     }
+    
+        //     if (fallingenemy[i].y > 121 && fallingenemy[i].y < 122) {
+        //         var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
+        //         torpedo.push(torp);
+        //     }
+    
+        //     if (fallingenemy[i].y > 132 && fallingenemy[i].y < 200) {
+        //         fallingenemy[i].turnback();
+        //     }
+    
+        //     if (fallingenemy[i].y > 620) {
+    
+        //         fallingenemy[i].kill();
+        //     }
+        //     // if (fallingenemy[i].x > width || fallingenemy[i].x < 0) {
+        //     //     edge = true;
+        //     // }
+        // }  
 
-        if (fallingenemy[i].y > 82 && fallingenemy[i].y < 120) {
-            //fallingenemy[i].xdir *= -1;
-            fallingenemy[i].turn();
-        }
 
-        if (fallingenemy[i].y > 121 && fallingenemy[i].y < 122) {
-            var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
-            torpedo.push(torp);
-        }
 
-        if (fallingenemy[i].y > 132 && fallingenemy[i].y < 200) {
-            fallingenemy[i].turnback();
-        }
 
-        if (fallingenemy[i].y > 620) {
-
-            fallingenemy[i].kill();
-        }
-        // if (fallingenemy[i].x > width || fallingenemy[i].x < 0) {
-        //     edge = true;
+        // for (var i = 0; i < scrollingenemy.length; i++) {
+        //     scrollingenemy[i].show();
+        //     scrollingenemy[i].move();       
         // }
-    }  
+
+    }
+
+
+
 
     if (edge) {
         for (var i = 0; i < fallingenemy.length; i++) {
             fallingenemy[i].shift();
         }
     }
-    for (var i = 0; i < scrollingenemy.length; i++) {
-        scrollingenemy[i].show();
-        scrollingenemy[i].move();
-        // if (flowers[i].x > width || flowers[i].x < 0) {
-        //     edge = true;
-        // }
-    }
-
-    //update and draw enemies
-    for (let enemy of enemies) {
-        enemy.y += 2;
-        //enemy.x += 1;
-        image(enemyImage, enemy.x, enemy.y, 60, 60);
-    }
+    
 
     for (var i = 0; i < fire.length; i++) {
         fire[i].show();
@@ -336,28 +417,12 @@ function draw() {
             //console.log(explode);
             //   console.log(fallingenemy.length);
         }
-        
 
-
-
-        
-    
-
-
-
-
-
-
-        if (fallingenemy.length < 1) {
-
-
-
-            
+        if (fallingenemy.length < 1) {            
             for (var i = 0; i < 4; i++) {
                 fallingenemy[i] = new fallingEnemy(i * 150 + 155, random(-100, -500), enemyImage2);
             }
-            wave += 1;
-            
+            wave += 1;          
             
         }
     }
@@ -408,7 +473,12 @@ keydown = (event) => {
         //console.log("left");
     }
     if (event.code == "Space") {
-        shootPressed = true;
+        if(intro){
+            intro = false;
+            leveloneintro = true;
+            //levelone = true;        
+        }
+        
     }
     if (event.code == "KeyP") {
         if (pauseGame == false) {
