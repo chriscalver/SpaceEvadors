@@ -36,9 +36,6 @@ function fallingEnemy(x, y, pic) {
     this.y -= 1;
   }
 
-
-
-
   this.show = function () {
     noStroke();
     fill(255, 0, 200, 150);

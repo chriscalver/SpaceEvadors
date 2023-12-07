@@ -1,7 +1,7 @@
-//let enemies = [];
 var ship;
 var scrollingenemy = [];
 var fallingenemy = [];
+let fallingenemtOn = false;
 let fallingenemyX = 0;
 let fallingenemyY = 0;
 var angle = 0;
@@ -19,7 +19,6 @@ let explosionSprites = [];
 let animation = [];
 let explode = false;
 let explodecounter = 0;
-
 let blowup;
 
 let playerImage;
@@ -53,13 +52,12 @@ let shootPressed = false;
 let pauseGame = false;
 
 function preload() {
-     playerImage = loadImage('guitar.png');
+    playerImage = loadImage('guitar.png');
     enemyImage = loadImage('enemy1.png');
     enemyImage2 = loadImage('enemy2.png');
     enemyImage3 = loadImage('enemy3.png');
-   // enemyPic = loadImage('enemy3.png');
-    
-     planetexpress = loadImage('planetexpress.png');
+    // enemyPic = loadImage('enemy3.png');    
+    planetexpress = loadImage('planetexpress.png');
     font = loadFont('gamefont.ttf');
     bg = loadImage("back.png");
     menuImage = loadImage("menu.png");
@@ -74,15 +72,16 @@ function setup() {
     bgWidth = width;
 
     let w = spritesheet.width / 4;
-    let h = spritesheet.height;   
-    for (let x = 0; x < 4; x++) {       
+    let h = spritesheet.height;
+
+    for (let x = 0; x < 4; x++) {
         sprites[x] = spritesheet.get(x * w, 0, w, h);  // first 2 are top left coorinates
     }
-  
+
     let explWidth = explosionSpritesheet.width / 8;   //  256
     let explHeight = explosionSpritesheet.height / 6;  // 256
 
-     // there are six rows, create a for loop to iterate through them 
+    // there are six rows, create a for loop to iterate through them 
     for (let y = 0; y < 6; y++) {
         // create another emoty array for that row
         explosionSprites[y] = [];
@@ -94,50 +93,64 @@ function setup() {
         }
     }
 
-    blowup = new Bomb(0.9, animation);    
-
+    blowup = new Bomb(0.9, animation);
     ship = new Ship();
     document.addEventListener("keydown", this.keydown);
-    document.addEventListener("keyup", this.keyup);    
+    document.addEventListener("keyup", this.keyup);
 
-        setTimeout(getfallingenemy, 1000);
-        function getfallingenemy() {
-            for (var i = 0; i < 3; i++) {
-                fallingenemy[i] = new fallingEnemy(i * 75 + 275, random(-100, -600), enemyImage);
-            }
-            leveloneintro = false;
-            //leveltwo = false;
-            wave = 1;
-
-    
-        }
-        setTimeout(getscrollingenemy, 1000);
-        function getscrollingenemy() {       //scrolling futurama ship
-            for (var i = 0; i < 1; i++) {
-                scrollingenemy[i] = new scrollingEnemy(-1520, -20);
-            }
-        }
-
-        
-      
+    // setTimeout(getfallingenemy, 1000);
+    // function getfallingenemy() {
+    //     for (var i = 0; i < 3; i++) {
+    //         fallingenemy[i] = new fallingEnemy(i * 75 + 275, random(-100, -600), enemyImage);
+    //     }
+    //     leveloneintro = false;
+    //     //leveltwo = false;
+    //     wave = 1;    
+    // }
+    // setTimeout(getscrollingenemy, 1000);
+    // function getscrollingenemy() {       //scrolling futurama ship
+    //     for (var i = 0; i < 1; i++) {
+    //         scrollingenemy[i] = new scrollingEnemy(-1520, -20);
+    //     }
+    // }        
 }
 
 // draw area
 
+   
 function draw() {
+    console.log("wave = " + wave  + " " + "levelone = " + levelone + " " + "leveltwo = " + leveltwo);
+// console.log("levelone " + levelone);
+// console.log("leveltwo = " + leveltwo);
     background('black');
-    console.log("wave = " + wave);
 
-    if(wave == 2){
-        leveltwointro = true;
-        
-
-
-        //console.log("HHHHHHHHHHHHHHHHH");
+    bgY += 2;
+    //console.log(bgY);
+    if (bgY > bgHeight) {
+        bgY = 0;
     }
+    if (explode) {
+        blowup.show();
+        blowup.animate();
+        //console.log(explode);
+        explodecounter += 1;
+
+        if (blowup.index >= blowup.len) {
+            //console.log("Hey");
+            explode = false;
+            blowup.index = 0;
+        }
+    }
+
     image(bg, bgX, bgY, bgWidth, bgHeight);
-    
     image(bg, bgX, bgY - bgHeight, bgWidth, bgHeight);
+
+    // rectMode(CENTER);
+    ship.show();
+    ship.move();
+    image(sprites[frameCount % 4], ship.x - 64, ship.y + spritedistance, 128, spritelength);
+
+
     if (pauseGame) { // check for pause        
         textFont(font);
         textSize(32);
@@ -147,7 +160,7 @@ function draw() {
         return;
     }
 
-    if(intro){
+    if (intro) {
 
         textFont(font);
         textSize(34);
@@ -166,185 +179,197 @@ function draw() {
         text('Stratocasters', 200, 300);
 
         setTimeout(levelonepause, 2000);
-        function levelonepause() {       //scrolling futurama ship
+        function levelonepause() {
             levelone = true;
-           leveloneintro = false;
-
+            leveloneintro = false;
         }
-
     }
-    
 
-    if(levelone){
+    if (levelone) {
         textFont(font);
         textSize(22);
         fill('grey');
         text('Level One', 50, 30);
-    
-        textSize(22);
-        fill('grey');
         text('SCORE:', 515, 30);
-    
-        textSize(22);
-        fill('grey');   
         text(score, 655, 30);
 
-    }
+        //setTimeout(getfallingenemy, 1000);
+        //function getfallingenemy() {
+        //if(fallingEnemy.length)    
 
-    
+        if (fallingenemy.length < 1) {
+            for (var i = 0; i < 4; i++) {
+                fallingenemy[i] = new fallingEnemy(i * 150 + 155, random(-100, -500), enemyImage2);
+            }
 
-    bgY += 2;
-    //console.log(bgY);
-    if (bgY > bgHeight) {
-        bgY = 0;
-    }
-    if (explode) {
-        blowup.show();
-        blowup.animate();
-        //console.log(explode);
-        explodecounter += 1;
-
-        if (blowup.index >= blowup.len) {
-            //console.log("Hey");
-            explode = false;
-            blowup.index = 0;
-
-        }      
-        
-    }
-
-
-    if (leveltwointro) {
-        textFont(font);
-        textSize(32);
-
-        fill('grey');
-        text('Level Two', 260, 230);
-        text('Les Pauls', 260, 300);
-       // fallingenemy = [];
-       // scrollingenemy = [];
-
-        setTimeout(leveltwopause, 2000);
-        function leveltwopause() {       //scrolling futurama ship
-            leveltwo = true;
-            leveltwointro = false;
-            wave = 1;
+            wave += 1;
         }
-
-    }
-
-    rectMode(CENTER);
-    ship.show();
-    ship.move();       
-    image(sprites[frameCount % 4], ship.x - 64, ship.y + spritedistance, 128, spritelength);
-
-
-    if(levelone){
+        // for (var i = 0; i < 3; i++) {
+        //         fallingenemy[i] = new fallingEnemy(i * 75 + 275, random(-100, -600), enemyImage);
+        //     }
+        //     leveloneintro = false;
+        //     //leveltwo = false;
+        //     wave = 1;    
+        // }
 
         for (var i = 0; i < fallingenemy.length; i++) {
             fallingenemy[i].show();
             fallingenemy[i].move();
-    
+
             if (fallingenemy[i].y > 10 && fallingenemy[i].y < 40) {
                 fallingenemy[i].turn();
             }
-    
             if (fallingenemy[i].y > 41 && fallingenemy[i].y < 42) {
                 var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
                 torpedo.push(torp);
             }
-    
             if (fallingenemy[i].y > 42 && fallingenemy[i].y < 80) {
                 fallingenemy[i].turnback();
             }
-    
             if (fallingenemy[i].y > 82 && fallingenemy[i].y < 120) {
                 //fallingenemy[i].xdir *= -1;
                 fallingenemy[i].turn();
             }
-    
             if (fallingenemy[i].y > 121 && fallingenemy[i].y < 122) {
                 var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
                 torpedo.push(torp);
             }
-    
             if (fallingenemy[i].y > 132 && fallingenemy[i].y < 200) {
                 fallingenemy[i].turnback();
             }
-    
             if (fallingenemy[i].y > 620) {
-    
+
                 fallingenemy[i].kill();
             }
             // if (fallingenemy[i].x > width || fallingenemy[i].x < 0) {
             //     edge = true;
             // }
-        }  
-
-
-
-
+        }
         for (var i = 0; i < scrollingenemy.length; i++) {
             scrollingenemy[i].show();
-            scrollingenemy[i].move();       
+            scrollingenemy[i].move();
+            if (fallingenemy.length < 1) {
+                for (var i = 0; i < 4; i++) {
+                    fallingenemy[i] = new fallingEnemy(i * 150 + 155, random(-100, -500), enemyImage2);
+                }
+                wave += 1;
+            }
+        }
+
+
+    }
+
+    if (wave == 3) {
+        levelone = false;
+        fallingenemy = [];
+        leveltwointro = true;
+        //console.log("HHHHHHHHHHHHHHHHH");
+        //  console.log("levelone " + levelone);
+    }
+
+    if (leveltwointro) {
+        textFont(font);
+        textSize(32);
+        fill('grey');
+        text('Level Two', 260, 230);
+        text('Les Pauls', 260, 300);
+        // fallingenemy = [];
+        // scrollingenemy = [];
+        setTimeout(leveltwopause, 2000);
+        function leveltwopause() {      
+            leveltwo = true;
+            leveltwointro = false;
+            //wave = 1;
+           // wave += 1;
         }
 
     }
 
 
+    if (leveltwo) {
 
+        textFont(font);
+        textSize(22);
+        fill('grey');
+        text('Level Two', 50, 30);
+        text('SCORE:', 515, 30);
+        text(score, 655, 30);
 
-    if(leveltwo){
+        //setTimeout(getfallingenemy, 1000);
+        //function getfallingenemy() {
+        //if(fallingEnemy.length)    
 
-        // for (var i = 0; i < fallingenemy.length; i++) {
-        //     fallingenemy[i].show();
-        //     fallingenemy[i].move();
-    
-        //     if (fallingenemy[i].y > 10 && fallingenemy[i].y < 40) {
-        //         fallingenemy[i].turn();
-        //     }
-    
-        //     if (fallingenemy[i].y > 41 && fallingenemy[i].y < 42) {
-        //         var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
-        //         torpedo.push(torp);
-        //     }
-    
-        //     if (fallingenemy[i].y > 42 && fallingenemy[i].y < 80) {
-        //         fallingenemy[i].turnback();
-        //     }
-    
-        //     if (fallingenemy[i].y > 82 && fallingenemy[i].y < 120) {
-        //         //fallingenemy[i].xdir *= -1;
-        //         fallingenemy[i].turn();
-        //     }
-    
-        //     if (fallingenemy[i].y > 121 && fallingenemy[i].y < 122) {
-        //         var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
-        //         torpedo.push(torp);
-        //     }
-    
-        //     if (fallingenemy[i].y > 132 && fallingenemy[i].y < 200) {
-        //         fallingenemy[i].turnback();
-        //     }
-    
-        //     if (fallingenemy[i].y > 620) {
-    
-        //         fallingenemy[i].kill();
-        //     }
-        //     // if (fallingenemy[i].x > width || fallingenemy[i].x < 0) {
-        //     //     edge = true;
-        //     // }
-        // }  
+        if (fallingenemy.length < 1) {
+            for (var i = 0; i < 4; i++) {
+                fallingenemy[i] = new fallingEnemy(i * 150 + 155, random(-100, -500), enemyImage3);
+            }
 
-
-
-
-        // for (var i = 0; i < scrollingenemy.length; i++) {
-        //     scrollingenemy[i].show();
-        //     scrollingenemy[i].move();       
+             wave += 1;
+        }
+        // for (var i = 0; i < 3; i++) {
+        //         fallingenemy[i] = new fallingEnemy(i * 75 + 275, random(-100, -600), enemyImage);
+        //     }
+        //     leveloneintro = false;
+        //     //leveltwo = false;
+        //     wave = 1;    
         // }
 
+        for (var i = 0; i < fallingenemy.length; i++) {
+            fallingenemy[i].show();
+            fallingenemy[i].move();
+
+            if (fallingenemy[i].y > 10 && fallingenemy[i].y < 40) {
+                fallingenemy[i].turn();
+            }
+            if (fallingenemy[i].y > 41 && fallingenemy[i].y < 42) {
+                var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
+                torpedo.push(torp);
+            }
+            if (fallingenemy[i].y > 42 && fallingenemy[i].y < 80) {
+                fallingenemy[i].turnback();
+            }
+            if (fallingenemy[i].y > 82 && fallingenemy[i].y < 120) {
+                //fallingenemy[i].xdir *= -1;
+                fallingenemy[i].turn();
+            }
+            if (fallingenemy[i].y > 121 && fallingenemy[i].y < 122) {
+                var torp = new Torpedo(fallingenemy[i].x, fallingenemy[i].y);
+                torpedo.push(torp);
+            }
+            if (fallingenemy[i].y > 132 && fallingenemy[i].y < 200) {
+                fallingenemy[i].turnback();
+            }
+            if (fallingenemy[i].y > 620) {
+
+                fallingenemy[i].kill();
+            }
+            // if (fallingenemy[i].x > width || fallingenemy[i].x < 0) {
+            //     edge = true;
+            // }
+        }
+        for (var i = 0; i < scrollingenemy.length; i++) {
+            scrollingenemy[i].show();
+            scrollingenemy[i].move();
+            if (fallingenemy.length < 1) {
+                for (var i = 0; i < 4; i++) {
+                    fallingenemy[i] = new fallingEnemy(i * 150 + 155, random(-100, -500), enemyImage3);
+                }
+                wave += 1;
+            }
+        }
     }
+
+    if (wave == 6) {
+        leveltwo = false;
+        fallingenemy = [];
+        //leveltwointro = true;
+        console.log(wave);
+        //  console.log("levelone " + levelone);
+    }
+
+
+
+
 
 
 
@@ -354,7 +379,6 @@ function draw() {
             fallingenemy[i].shift();
         }
     }
-    
 
     for (var i = 0; i < fire.length; i++) {
         fire[i].show();
@@ -363,7 +387,6 @@ function draw() {
         if (fire[i].y < 0) {    // delete fire if if leaves the screen
             fire[i].evaporate();
         }
-
         //collision detection
         for (var j = 0; j < scrollingenemy.length; j++) {
             if (fire[i].hits(scrollingenemy[j])) {
@@ -373,7 +396,6 @@ function draw() {
                 score += 100;
             }
         }
-
         for (var j = 0; j < fallingenemy.length; j++) {
             if (fire[i].hits2(fallingenemy[j])) {
                 //fallingenemy[j].grow();        //  drop hits flower and grows
@@ -383,19 +405,16 @@ function draw() {
             }
         }
     }
-
     for (var i = 0; i < torpedo.length; i++) {
         torpedo[i].show();
         torpedo[i].move();
-        
+
     }
-    
     for (var i = fire.length - 1; i >= 0; i--) {
         if (fire[i].toDelete) {   // toDelete comes from drop 15
             fire.splice(i, 1);        // delete drop from array
         }
     }
-
     for (var i = scrollingenemy.length - 1; i >= 0; i--) {
         if (scrollingenemy[i].toDelete) {   // toDelete comes from drop 15
             fallingenemyX = scrollingenemy[i].x + 100;
@@ -404,8 +423,6 @@ function draw() {
             scrollingenemy.splice(i, 1);        // delete drop from array
         }
     }
-
-
     for (var i = fallingenemy.length - 1; i >= 0; i--) {
         if (fallingenemy[i].toDelete) {   // toDelete comes from drop 15
             fallingenemyX = fallingenemy[i].x;
@@ -418,18 +435,15 @@ function draw() {
             //   console.log(fallingenemy.length);
         }
 
-        if (fallingenemy.length < 1) {            
-            for (var i = 0; i < 4; i++) {
-                fallingenemy[i] = new fallingEnemy(i * 150 + 155, random(-100, -500), enemyImage2);
-            }
-            wave += 1;          
-            
-        }
+        // if (fallingenemy.length < 1) {
+        //     for (var i = 0; i < 4; i++) {
+        //         fallingenemy[i] = new fallingEnemy(i * 150 + 155, random(-100, -500), enemyImage2);
+        //     }
+        //     wave += 1;
+        // }
     }
     image(menuImage, 0, 550, 800, 50);
 }
-
-
 
 if (spritelength > 150) {
     spritelength = 150;
@@ -463,7 +477,6 @@ keydown = (event) => {
             // console.log(spritedistance);
         }
     }
-
     if (event.code == "KeyD") {
         rightPressed = true;
         // console.log("right");
@@ -473,22 +486,21 @@ keydown = (event) => {
         //console.log("left");
     }
     if (event.code == "Space") {
-        if(intro){
+        if (intro) {
             intro = false;
             leveloneintro = true;
             //levelone = true;        
         }
-        
+
     }
     if (event.code == "KeyP") {
         if (pauseGame == false) {
             pauseGame = true;
         } else {
             pauseGame = false;
-        }      
+        }
     }
 }
-
 keyup = (event) => {
     if (event.code == "KeyD") {
         rightPressed = false;
@@ -512,7 +524,6 @@ keyup = (event) => {
 };
 
 function mousePressed() {
-
     var drop = new Fire(ship.x, ship.y);
     fire.push(drop);
     //var torp =  new Torpedo(fallingenemy[1].x, fallingenemy[1].y);
