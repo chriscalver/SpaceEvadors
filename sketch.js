@@ -107,21 +107,21 @@ function setup() {
     //     //leveltwo = false;
     //     wave = 1;    
     // }
-    // setTimeout(getscrollingenemy, 1000);
-    // function getscrollingenemy() {       //scrolling futurama ship
-    //     for (var i = 0; i < 1; i++) {
-    //         scrollingenemy[i] = new scrollingEnemy(-1520, -20);
-    //     }
-    // }        
+    setTimeout(getscrollingenemy, 1000);
+    function getscrollingenemy() {       //scrolling futurama ship
+        for (var i = 0; i < 1; i++) {
+            scrollingenemy[i] = new scrollingEnemy(random(-300, -500), -20);
+        }
+    }        
 }
 
 // draw area
 
-   
+
 function draw() {
-    console.log("wave = " + wave  + " " + "levelone = " + levelone + " " + "leveltwo = " + leveltwo);
-// console.log("levelone " + levelone);
-// console.log("leveltwo = " + leveltwo);
+    //console.log("wave = " + wave  + " " + "levelone = " + levelone + " " + "leveltwo = " + leveltwo);
+    // console.log("levelone " + levelone);
+    // console.log("leveltwo = " + leveltwo);
     background('black');
 
     bgY += 2;
@@ -129,6 +129,9 @@ function draw() {
     if (bgY > bgHeight) {
         bgY = 0;
     }
+
+    image(bg, bgX, bgY, bgWidth, bgHeight);
+    image(bg, bgX, bgY - bgHeight, bgWidth, bgHeight);
     if (explode) {
         blowup.show();
         blowup.animate();
@@ -142,8 +145,7 @@ function draw() {
         }
     }
 
-    image(bg, bgX, bgY, bgWidth, bgHeight);
-    image(bg, bgX, bgY - bgHeight, bgWidth, bgHeight);
+
 
     // rectMode(CENTER);
     ship.show();
@@ -276,11 +278,11 @@ function draw() {
         // fallingenemy = [];
         // scrollingenemy = [];
         setTimeout(leveltwopause, 2000);
-        function leveltwopause() {      
+        function leveltwopause() {
             leveltwo = true;
             leveltwointro = false;
             //wave = 1;
-           // wave += 1;
+            // wave += 1;
         }
 
     }
@@ -304,7 +306,7 @@ function draw() {
                 fallingenemy[i] = new fallingEnemy(i * 150 + 155, random(-100, -500), enemyImage3);
             }
 
-             wave += 1;
+            wave += 1;
         }
         // for (var i = 0; i < 3; i++) {
         //         fallingenemy[i] = new fallingEnemy(i * 75 + 275, random(-100, -600), enemyImage);
@@ -363,7 +365,7 @@ function draw() {
         leveltwo = false;
         fallingenemy = [];
         //leveltwointro = true;
-        console.log(wave);
+        // console.log(wave);
         //  console.log("levelone " + levelone);
     }
 
@@ -431,7 +433,7 @@ function draw() {
 
             fallingenemy.splice(i, 1);        // delete from array
             explode = true;
-            //console.log(explode);
+            console.log(explode);
             //   console.log(fallingenemy.length);
         }
 
