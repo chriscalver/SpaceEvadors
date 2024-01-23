@@ -128,7 +128,7 @@ function draw() {
   // console.log("levelone " + levelone);
   // console.log("leveltwo = " + leveltwo);
   background("black");
-
+  console.log(wave);
   bgY += 2;
   //console.log(bgY);
   if (bgY > bgHeight) {
@@ -389,8 +389,17 @@ function draw() {
   if (wave == 6) {
     leveltwo = false;
     fallingenemy = [];
+
+    textFont(font);
+    textSize(22);
+    fill("grey");
+    text("GAME OVER", 300, 230);
+    text("Game Over", 50, 30);
+    text("SCORE:", 515, 30);
+    text(score, 655, 30);
+
     //leveltwointro = true;
-    // console.log(wave);
+    //  console.log(wave);
     //  console.log("levelone " + levelone);
   }
 
