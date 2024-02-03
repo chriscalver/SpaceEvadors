@@ -417,6 +417,7 @@ function draw() {
       // delete fire if if leaves the screen
       fire[i].evaporate();
     }
+
     //collision detection
     for (var j = 0; j < scrollingenemy.length; j++) {
       if (fire[i].hits(scrollingenemy[j])) {
